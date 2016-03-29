@@ -17,7 +17,7 @@ public class Main extends JPanel {
     //    y = C* Cos t + D
     double A = 100;
     double B = 100;
-    double C = 0;
+    double C = -1;
     double D = 100;
     boolean shouldTurn = true;
 
@@ -185,9 +185,10 @@ public class Main extends JPanel {
 
 
             while (y >= 0)
-//            while(x < Math.abs(C))
             {
                 IntPoint dI = new IntPoint(a.intPoint.x + 1, a.intPoint.y + 1);
+                if (y == 0)
+                    dI = new IntPoint(a.intPoint.x, a.intPoint.y);
                 PointPairs d = new PointPairs(dI);
                 d.calculateRealPoint();
                 double deltaC = getDelta(d.realPoint);
@@ -204,14 +205,6 @@ public class Main extends JPanel {
             }
             intPoints.remove(intPoints.size() - 1);
             intPoints.remove(intPoints.size() - 1);
-            intPoints.remove(intPoints.size() - 1);
-            intPoints.remove(intPoints.size() - 1);
-            while (x <= Math.abs(C))
-            {
-                intPoints.add(new IntPoint((int)x + 1, (int)y+1));
-                intPoints.add(new IntPoint((int)x*(-1) - 1, (int)y+1));
-                x ++;
-            }
             intPoints.remove(intPoints.size() - 1);
             intPoints.remove(intPoints.size() - 1);
         }

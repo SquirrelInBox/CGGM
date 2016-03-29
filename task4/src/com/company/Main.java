@@ -35,16 +35,16 @@ public class Main extends JPanel{
     void calculate(Graphics g)
     {
         double x, y, z, xx, yy;
-        int n = 300, m = width*2;
+        int n = 100, m = width*2;
         int top[]= new int[m];
         int bottom[] = new int[m];
 
         for(int i = 0; i < n; i++)
         {
             x = x2 + i*(x1 - x2)/n;
-            for(int j = 0; j < n; j++)
+            for(int j = 0; j < m; j++)
             {
-                y = y2 + j*(y1 - y2)/n;
+                y = y2 + j*(y1 - y2)/m;
                 z = f(x, y);
 
                 xx = coord_x(x, y, z);
@@ -57,7 +57,7 @@ public class Main extends JPanel{
             }
         }
 
-        for(int i = 0; i < width; i++)
+        for(int i = 0; i < m; i++)
         {
             top[i] = height;
             bottom[i] = 0;
@@ -66,8 +66,8 @@ public class Main extends JPanel{
         for(int i = 0; i < n; i++)
         {
             x = x2 + i*(x1 - x2)/n;
-            for(int j = 0; j < n; j++) {
-                y = y2 + j * (y1 - y2) / n;
+            for(int j = 0; j < m; j++) {
+                y = y2 + j * (y1 - y2) / m;
                 z = f(x, y);
 
                 xx = coord_x(x, y, z);
