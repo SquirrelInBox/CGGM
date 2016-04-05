@@ -1,8 +1,6 @@
 package com.company;
 
-/**
- * Created by Helen on 22.03.2016.
- */
+
 public class Section {
     Point a;
     Point b;
@@ -39,11 +37,6 @@ public class Section {
         middle.x = x;
         middle.y = y;
         setNormal();
-    }
-
-    public boolean equals(Section cd)
-    {
-        return a.equals(cd.a) && b.equals(cd.b) ||a.equals(cd.b) && b.equals(cd.a);
     }
 
     public Point getPointIntersect(Section cd)

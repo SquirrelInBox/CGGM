@@ -5,16 +5,12 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.BitSet;
 import java.util.Vector;
 
 
 public class Main extends JPanel {
     static int width = 800;
     static int height = 600;
-    int coef = 1;
-    int xShift = 400;
-    int yShift = 300;
 
 
     Polygon polygon = new Polygon();
@@ -134,13 +130,6 @@ public class Main extends JPanel {
         if (points.size() == 0)
             return null;
         return new Pair<>(points.firstElement(), points.lastElement());
-    }
-
-    private void drawLine(Section ab, Graphics g)
-    {
-        Pair<Integer, Integer> p1 = transferCoords(ab.a);
-        Pair<Integer, Integer> p2 = transferCoords(ab.b);
-        g.drawLine(p1.getKey(), p1.getValue(), p2.getKey(), p2.getValue());
     }
 
     private Polygon getOnePoly(Vector<Point> newPoly, Section bk, Point k, Section ab)
@@ -266,16 +255,6 @@ public class Main extends JPanel {
         if (c1.r > c2.r)
             c2 = c1;
 
-        g.setColor(Color.BLUE);
-//        drawPolygon(g);
-        g.setColor(Color.black);
-
-//        Pair<Integer, Integer> p2 = transferCoords(c1.center);
-//        int intR1 = (int)(c1.r*coef);
-//        g.drawOval(p2.getKey() - intR1, p2.getValue() - intR1, intR1*2, intR1*2);
-
-//        drawBisections(g);
-
         polygon.polygon = tempPoly;
         polygon.initSections();
         polygon.findBisectors();
@@ -290,8 +269,8 @@ public class Main extends JPanel {
         while(i < polygon.sections.size())
         {
             Section currSect = polygon.sections.get(i);
-
             Point iSect = getPointTouch(c, currSect);
+
             if (iSect == null)
             {
                 i++;
@@ -304,6 +283,7 @@ public class Main extends JPanel {
                 i++;
                 continue;
             }
+
             i += newPoly.firstElement().polygon.size() - 2;
 
             for (Polygon poly : newPoly)
@@ -321,44 +301,41 @@ public class Main extends JPanel {
         polygon.polygon = points;
     }
 
+    private void drawCircle(Circle c, Graphics g)
+    {
+        Pair<Integer, Integer> p1 = transferCoords(c.center);
+        int intR = (int)(c.r);
+        g.setColor(Color.BLUE);
+        g.drawOval(p1.getKey() - intR, p1.getValue() - intR, intR*2, intR*2);
+        g.setColor(Color.black);
+    }
+
     private void calculate(Graphics g)
     {
         polygon.initPolygon();
         Circle c = getCircle(g);
-
-        Pair<Integer, Integer> p1 = transferCoords(c.center);
-        int intR = (int)(c.r*coef);
-        g.setColor(Color.BLUE);
-        g.drawOval(p1.getKey() - intR, p1.getValue() - intR, intR*2, intR*2);
-        g.setColor(Color.black);
+        drawCircle(c, g);
 
         Circle c2 = oneCycle(c, g);
 
         invertPoints();
         polygon.initSections();
 
-
         Circle c3 = oneCycle(c, g);
 
         if (c3.r > c2.r)
             c2 = c3;
 
-        Pair<Integer, Integer> p2 = transferCoords(c2.center);
-        int intR1 = (int)(c2.r*coef);
-        g.drawOval(p2.getKey() - intR1, p2.getValue() - intR1, intR1*2, intR1*2);
+        drawCircle(c2, g);
     }
 
     private Pair<Integer, Integer> transferCoords(Point a)
     {
-        int xx = (int)(a.x * coef) + xShift;
-        int yy = (int)(a.y * coef);
-        if (yy >=0)
-            yy = yShift - yy;
-        else
-            yy = yShift + (-1) * yy;
+        int xx = (int) a.x;
+        int yy = (int) a.y;
         return new Pair<>(xx, yy);
     }
-    
+
     private void drawPolygon(Graphics g)
     {
         int[] xxCoords = new int[polygon.polygon.size()];
@@ -373,44 +350,17 @@ public class Main extends JPanel {
         g.drawPolygon(xxCoords, yyCoords, polygon.polygon.size());
     }
 
-    private void drawBisections(Graphics g)
-    {
-        for (Section section : bisectors)
-        {
-            drawLine(section, g);
-        }
-    }
-
-    private void drawNormals(Graphics g)
-    {
-        for (Section section : polygon.sections)
-        {
-            drawLine(new Section(section.middle, section.normal), g);
-        }
-    }
-
     @Override
     public void paint(Graphics g)
     {
         super.paint(g);
-        
+
 
         calculate(g);
 
-        g.drawLine(0, 300, 800, 300);
-        g.drawLine(400, 0, 400, 600);
-
-//        polygon.clear();
-//        initPolygon();
         g.setColor(Color.red);
         drawPolygon(g);
         g.setColor(Color.black);
-
-//        g.setColor(Color.BLUE);
-//        drawNormals(g);
-//
-//        g.setColor(Color.RED);
-//        drawBisections(g);
 
         super.repaint();
     }

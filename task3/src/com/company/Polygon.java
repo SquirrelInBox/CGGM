@@ -34,28 +34,28 @@ public class Polygon {
 //        polygon.add(new Point(1, 2));
 //        polygon.add(new Point(0, 1));
 
-//        polygon.add(new Point(0,200));
-//        polygon.add(new Point(0,-100));
-//        polygon.add(new Point(200,-100));
-//        polygon.add(new Point(100,200));
-//        polygon.add(new Point(50,300));
+        polygon.add(new Point(0,200));
+        polygon.add(new Point(0,-100));
+        polygon.add(new Point(200,-100));
+        polygon.add(new Point(100,200));
+        polygon.add(new Point(50,300));
 //
-        polygon.add(new Point(0,0));
-        polygon.add(new Point(-200,0));
-        polygon.add(new Point(-100,300));
-        polygon.add(new Point(0,300));
+//        polygon.add(new Point(0,0));
+//        polygon.add(new Point(-200,0));
+//        polygon.add(new Point(-100,400));
+//        polygon.add(new Point(0,400));
 //
 //        polygon.add(new Point(0, 100));
 //        polygon.add(new Point(400, 0));
 //        polygon.add(new Point(400, 300));
-//        polygon.add(new Point(0, 300));
+//        polygon.add(new Point(-100, 300));
 //        polygon.add(new Point(0, 200));
 
 //        polygon.add(new Point(0, 0));
 //        polygon.add(new Point(500, 0));
-//        polygon.add(new Point(500, 100));
+//        polygon.add(new Point(500, 101));
 //        polygon.add(new Point(0, 100));
-
+//
 //        polygon.add(new Point(0, 250));
 //        polygon.add(new Point(0, 0));
 //        polygon.add(new Point(250, -30));
@@ -67,7 +67,6 @@ public class Polygon {
 //        polygon.add(new Point(100, 100));
 //        polygon.add(new Point(100, 0));
     }
-
 
     public void setPoly(Vector<Point> newPoly)
     {
@@ -86,7 +85,6 @@ public class Polygon {
 
     public void initSections()
     {
-
         sections.clear();
         Point a = polygon.lastElement();
         Point b = polygon.firstElement();
@@ -99,14 +97,13 @@ public class Polygon {
         }
     }
 
-    private Point getSection(double r, Point a, Point b)
+    public Point getSection(double r, Point a, Point b)
     {
         double d = a.getSqrDistance(b);
         double x = a.x*Math.sqrt(r/d) + (1 - Math.sqrt(r/d))*b.x;
         double y = a.y*Math.sqrt(r/d) + (1 - Math.sqrt(r/d))*b.y;
         return new Point(x, y);
     }
-
 
     private boolean isParallelLines(Section ab, Section cd)
     {
@@ -115,17 +112,17 @@ public class Polygon {
         return a.VP(b) == 0;
     }
 
-    private Point getLastPoint(Section ab, Point c)
+    private Point getLastPoint(Section startSect, Point touchPoint)
     {
-        if (ab.a.equals(c))
-            return ab.b;
-        if(ab.b.equals(c))
-            return ab.a;
-        double alpha = new Section(ab.b, c).getAlpha(ab.a);
+        if (startSect.a.equals(touchPoint))
+            return startSect.b;
+        if(startSect.b.equals(touchPoint))
+            return startSect.a;
+        double alpha = new Section(startSect.b, touchPoint).getAlpha(startSect.a);
         if (alpha <= 0 || alpha >= 1)
-            return ab.a;
+            return startSect.a;
         else
-            return ab.b;
+            return startSect.b;
     }
 
     public void findBisector(Section ab, Section bc)

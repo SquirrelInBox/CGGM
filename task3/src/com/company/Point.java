@@ -1,8 +1,6 @@
 package com.company;
 
-/**
- * Created by Helen on 22.03.2016.
- */
+
 public class Point {
     double x;
     double y;
